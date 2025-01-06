@@ -1,13 +1,11 @@
 package com.alex.quarkussocial.domain.model;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users", schema = "quarkus_social")
-public class User extends PanacheEntityBase {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
