@@ -3,6 +3,7 @@ package com.alex.quarkussocial.rest;
 import com.alex.quarkussocial.domain.model.User;
 import com.alex.quarkussocial.domain.repository.UserRepository;
 import com.alex.quarkussocial.rest.dto.CreateUserRequest;
+import com.alex.quarkussocial.rest.dto.ResponseError;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 import javax.inject.Inject;
@@ -12,7 +13,6 @@ import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Optional;
 import java.util.Set;
 
 @Path("/users")
@@ -35,9 +35,8 @@ public class UserResource {
 
         Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(userRequest);
         if (!violations.isEmpty()) {
-            ConstraintViolation<CreateUserRequest> erro = violations.stream().findAny().get();
-            String erroMessage = erro.getMessage();
-            return Response.status(400).entity(erroMessage).build();
+            ResponseError responseError = ResponseError.createFromValidation(violations);
+            return Response.status(400).entity(responseError).build();
         }
 
 
