@@ -5,13 +5,18 @@ import com.alex.quarkussocial.domain.model.User;
 import com.alex.quarkussocial.domain.repository.PostRepository;
 import com.alex.quarkussocial.domain.repository.UserRepository;
 import com.alex.quarkussocial.rest.dto.CreatedPostRequest;
+import com.alex.quarkussocial.rest.dto.PostResponse;
+import io.quarkus.panache.common.Sort;
+
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -50,7 +55,18 @@ public class PostResource {
         if (user == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok().build();
+
+        //var query = repository.find("user", user);
+        var query = repository.find("user", Sort.by("dateTime", Sort.Direction.Ascending), user);
+
+        var list = query.list();
+
+        var postResponseList = list.stream()
+                //.map(post -> PostResponse.fromEntity(post))
+                .map(PostResponse::fromEntity)
+                .collect(Collectors.toList());
+
+        return Response.ok(postResponseList).build();
     }
 
 }
