@@ -4,7 +4,7 @@ import com.alex.quarkussocial.domain.model.Post;
 import com.alex.quarkussocial.domain.model.User;
 import com.alex.quarkussocial.domain.repository.PostRepository;
 import com.alex.quarkussocial.domain.repository.UserRepository;
-import com.alex.quarkussocial.rest.dto.CreatedPostRequest;
+import com.alex.quarkussocial.rest.dto.CreatePostRequest;
 import com.alex.quarkussocial.rest.dto.PostResponse;
 import io.quarkus.panache.common.Sort;
 
@@ -14,7 +14,6 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -34,7 +33,7 @@ public class PostResource {
 
     @POST
     @Transactional
-    public Response savePost(@PathParam("userId") Long userId, CreatedPostRequest request) {
+    public Response savePost(@PathParam("userId") Long userId, CreatePostRequest request) {
         User user = userRepository.findById(userId);
         if (user == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -57,7 +56,7 @@ public class PostResource {
         }
 
         //var query = repository.find("user", user);
-        var query = repository.find("user", Sort.by("dateTime", Sort.Direction.Ascending), user);
+        var query = repository.find("user", Sort.by("dateTime", Sort.Direction.Descending), user);
 
         var list = query.list();
 

@@ -3,7 +3,8 @@ package com.alex.quarkussocial.rest.dto;
 import lombok.Data;
 
 @Data
-public class CreatedPostRequest {
+public class FollowerRequest {
 
-    private String text;
+    private Long followerId;
+
 }
